@@ -13,7 +13,7 @@ function buildMetadata(sample) {
     // Hint: Inside the loop, you will need to use d3 to append new
     // tags for each key-value in the metadata.
     Object.entries(sampleDict).forEach(([key, value]) => {
-      meta.append("p").text(key+" : "+value);     
+      meta.append("p"). text(key+" : "+value);     
     });
   });
     // BONUS: Build the Gauge Chart
@@ -39,7 +39,7 @@ function buildCharts(sample) {
         y: data.sample_values,
         type: 'scatter',
         mode: 'markers',
-        markers: {
+        marker: {
           size: data.sample_values
         },
         text: data.otu_ids.map(function(d,i){
@@ -61,7 +61,10 @@ function buildCharts(sample) {
         "value": sampleValues[j],
         "label": otuLabels[j] 
       });
+
+      
     }
+    
     newArray.sort(function(a,b) {
       return b.value-a.value;
     });
@@ -69,19 +72,20 @@ function buildCharts(sample) {
     // HINT: You will need to use slice() to grab the top 10 sample_values,
     // otu_ids, and labels (10 each).
     var plotArray = newArray.slice(0,10);
-    
+    console.log(plotArray);
     var pieplot_data = [
       {
         values: plotArray.map(function(d,i){
           return d.value;
         }), 
-        type: 'pie',
-        label: plotArray.map(function(d,i){
-          return d.label;
-        }), 
-        // text: plotArray.map(function(d,i){
-        //   return "("+d.id+", "+d.value+")"+d.label;
-        // })
+        
+        labels: plotArray.map(function(d,i){
+          return d.id;
+        }),
+        type: 'pie', 
+        hoverinfo: plotArray.map(function(d,i){
+          return "("+d.id[i]+", "+d.value[i]+")"+d.label[i];
+        })
       }
     ];
     var layout = {
